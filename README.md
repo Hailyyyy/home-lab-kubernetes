@@ -39,7 +39,7 @@ HTTP 기반 서비스 진입을 위해 **Ingress**를 구성하였다.
 ---
 
 ## Architecture Diagram
-![architecture](./docs/architecture.png)
+![architecture](file_00000000eacc7207bb7307a6341c02ef.png)
 
 ---
 
