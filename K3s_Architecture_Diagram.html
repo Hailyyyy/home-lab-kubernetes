@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Lab K3s Cluster Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #ffffff;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 1200px;
+            background: white;
+            border: 3px solid #000;
+            padding: 30px;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .layer {
+            margin-bottom: 20px;
+            border: 2px solid #000;
+            padding: 20px;
+        }
+        
+        .layer-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .layer-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .component {
+            border: 2px solid #000;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        
+        .component-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .component-detail {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .component-detail::before {
+            content: "• ";
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            border: 2px solid #000;
+            padding: 15px;
+            background: #f0f0f0;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .legend-icon {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tech-item {
+            border: 2px solid #000;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            background: white;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+            }
+            .container {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Home Lab / K3s Cluster Architecture</div>
+        <div class="subtitle">Proxmox VE 기반 Kubernetes 클러스터 (2025.12 ~ 현재)</div>
+        
+        <!-- Infrastructure Layer -->
+        <div class="layer">
+            <div class="layer-title">
+                <span class="layer-icon">🖥️</span>
+                Infrastructure Layer
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-title">Proxmox VE Host</div>
+                    <div class="component-detail">저사양 노트북 활용</div>
+                    <div class="component-detail">가상화 환경 제공</div>
+                    <div class="component-detail">VM 관리 및 모니터링</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">Network</div>
+                    <div class="component-detail">기가비트 스위치</div>
+                    <div class="component-detail">DHCP Reservation (고정 IP)</div>
+                    <div class="component-detail">유선망(eth0) 전용 통신</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">Storage</div>
+                    <div class="component-detail">Local-path provisioner</div>
+                    <div class="component-detail">동적 볼륨 프로비저닝</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- Kubernetes Layer -->
+        <div class="layer">
+            <div class="layer-title">
+                <span class="layer-icon">☸️</span>
+                Kubernetes Cluster (K3s v1.33.6)
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-title">Control Plane</div>
+                    <div class="component-detail">k8s-cp-01 (192.168.0.61)</div>
+                    <div class="component-detail">Ubuntu 24.04.3 LTS</div>
+                    <div class="component-detail">ARM64 (Raspberry Pi 4)</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">Worker Node 1</div>
+                    <div class="component-detail">k8s-wk-01 (192.168.0.62)</div>
+                    <div class="component-detail">Ubuntu 24.04.3 LTS</div>
+                    <div class="component-detail">ARM64 (Raspberry Pi 4)</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">Worker Node 2</div>
+                    <div class="component-detail">k8s-wk-02 (192.168.0.63)</div>
+                    <div class="component-detail">Ubuntu 24.04.3 LTS</div>
+                    <div class="component-detail">확장된 노드</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- Application Layer -->
+        <div class="layer">
+            <div class="layer-title">
+                <span class="layer-icon">📊</span>
+                Observability & Monitoring
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-title">Prometheus</div>
+                    <div class="component-detail">메트릭 수집 및 저장</div>
+                    <div class="component-detail">데이터 보존 2일</div>
+                    <div class="component-detail">SSH Port Forwarding 접근</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">Grafana</div>
+                    <div class="component-detail">메트릭 시각화</div>
+                    <div class="component-detail">Kubernetes 대시보드</div>
+                    <div class="component-detail">SSH Port Forwarding 접근</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">kube-state-metrics</div>
+                    <div class="component-detail">클러스터 상태 메트릭</div>
+                    <div class="component-detail">OOM 이벤트 추적</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-arrow">↓</div>
+        
+        <!-- Automation Layer -->
+        <div class="layer">
+            <div class="layer-title">
+                <span class="layer-icon">⚙️</span>
+                Automation & IaC
+            </div>
+            <div class="components">
+                <div class="component">
+                    <div class="component-title">Ansible</div>
+                    <div class="component-detail">Infrastructure as Code</div>
+                    <div class="component-detail">inventory, roles, playbooks</div>
+                    <div class="component-detail">멱등성 보장 (--check)</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">GitHub Actions</div>
+                    <div class="component-detail">CI Pipeline</div>
+                    <div class="component-detail">Playbook 문법 검증</div>
+                    <div class="component-detail">자동화된 테스트</div>
+                </div>
+                <div class="component">
+                    <div class="component-title">WireGuard VPN</div>
+                    <div class="component-detail">원격 접근 보안</div>
+                    <div class="component-detail">내부망 격리</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tech Stack -->
+        <div class="legend">
+            <div class="legend-title">🛠️ Technology Stack</div>
+            <div class="tech-stack">
+                <div class="tech-item">K3s v1.33.6</div>
+                <div class="tech-item">Ansible</div>
+                <div class="tech-item">Prometheus</div>
+                <div class="tech-item">Grafana</div>
+                <div class="tech-item">Ubuntu 24.04</div>
+                <div class="tech-item">Proxmox VE</div>
+                <div class="tech-item">GitHub Actions</div>
+                <div class="tech-item">WireGuard</div>
+                <div class="tech-item">ARM64</div>
+                <div class="tech-item">Raspberry Pi</div>
+                <div class="tech-item">SSH</div>
+                <div class="tech-item">Helm</div>
+            </div>
+        </div>
+        
+        <!-- Key Features -->
+        <div class="legend" style="margin-top: 15px;">
+            <div class="legend-title">✨ 주요 특징 및 성과</div>
+            <div class="legend-item">
+                <span class="legend-icon">🔧</span>
+                DTB 파라미터 오염으로 인한 cgroup v2 이슈 해결 (cmdline override)
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🌐</span>
+                wlan0 비활성화를 통한 네트워크 안정화 (유선 전용 통신)
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">💥</span>
+                OOM 장애 시나리오 재현 및 자동 복구 메커니즘 검증
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">📝</span>
+                체계적인 트러블슈팅 문서화 및 운영 노하우 축적
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🔒</span>
+                보안 고려 설계 (Ingress/NodePort 미사용, SSH Port Forwarding)
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🔄</span>
+                IaC 기반 재현 가능한 인프라 구성 (멱등성 보장)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
